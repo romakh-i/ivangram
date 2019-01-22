@@ -14,7 +14,7 @@ function setupObservable() {
   var callback = function (mutationsList, observer) {
     for (var mutation of mutationsList) {
       if (mutation.type == 'childList') {
-        if (mutation.addedNodes[0].className == "more-comments") {
+        if (mutation.addedNodes[0].className == 'more-comments') {
           $(mutation.addedNodes[0]).click(async () => {
             const postId = parseInt(mutation.target.parentNode.parentNode.id.slice(1));
             const comments = await get(`http://5c332abce0948000147a7749.mockapi.io/api/v1/posts/${postId}/comments`);
@@ -36,7 +36,7 @@ function setupObservable() {
 }
 
 async function getPosts() {
-  const posts = await get("http://5c332abce0948000147a7749.mockapi.io/api/v1/posts");
+  const posts = await get('http://5c332abce0948000147a7749.mockapi.io/api/v1/posts');
   await sortByDate(posts);
 
   await posts.forEach(post => renderPost(post));
@@ -69,7 +69,7 @@ function renderPost(post) {
 
         <div class="comments"></div>
 
-        <div class="post-time">3 hours ago</div>
+        <div class="post-time"></div>
       </div>
     </div>`
 
@@ -80,6 +80,9 @@ function renderPost(post) {
 
   // displays comments to the post
   renderComments(post.id);
+
+  const time = moment(post.createdAt).fromNow();
+  $(`#p${post.id} .post-time`).append(time);
 }
 
 async function renderComments(postId) {
@@ -90,7 +93,7 @@ async function renderComments(postId) {
   // if more than 4 comments, adds expand button
   if (comments.length > 4) {
     const commentsHtml = $(`#p${postId} .comments`);
-    commentsHtml.append(`<div class="more-comments">Load more comments</div>`);
+    commentsHtml.append('<div class="more-comments">Load more comments</div>');
     n = 3;
   }
 
@@ -111,8 +114,7 @@ const getComment = (username, text) => {
     <div class="comment">
       <div class="username bold-font">${username}</div>
       <div class="comment-text">${text}</div>
-    </div>
-  `;
+    </div>`;
 }
 
 const sortByDate = async (arr) => {
