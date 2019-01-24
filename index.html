@@ -27,16 +27,15 @@
     <div class="container-fluid sticky-top bg-white">
       <div class="row title">
         <div class="col-auto">
-          <a href="#">
-            <div class="camera-btn"></div>
-          </a>
+          <input type="file" id="input" class="hidden" onchange="loadPhoto(this.files[0])">
+          <label for="input" class="camera-btn"></label>
         </div>
-        <div class="col text-center">𝓘𝓿𝓪𝓷𝓰𝓻𝓪𝓶</div>
+
+        <div class="col title-text"></div>
       </div>
     </div>
 
     <div class="posts"></div>
-
   </div>
 </body>
 

@@ -43,6 +43,13 @@ a:hover {
   width: 24px;
 }
 
+.title-text {
+  background-image: url(./icons/ivangram.png);
+  background-size: 110px 30px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
 .posts {
   position: inherit;
   overflow: auto;
@@ -80,6 +87,25 @@ a:hover {
 
 .post-photo img {
   width: 100%;
+  max-height: 540px;
+}
+
+@media (min-height: 768px) {
+  .post-photo img {
+    max-height: 700px;
+  }
+}
+
+@media (min-height: 992px) {
+  .post-photo img {
+    max-height: 850px;
+  }
+}
+
+@media (min-height: 1200px) {
+  .post-photo img {
+    max-height: 1100px;
+  }
 }
 
 .post-footer {
@@ -93,10 +119,18 @@ a:hover {
   background-color: transparent;
 }
 
+.post-btn:selection {
+  border: 0px;
+}
+
 .like-btn {
   background: url("icons/like.png") no-repeat center/100%;
   height: 24px;
   width: 24px;
+}
+
+.liked {
+  background-image: url("./icons/liked.png");
 }
 
 .comment-btn {
@@ -141,22 +175,4 @@ a:hover {
   letter-spacing: .2px;
   color: #999;
   margin-bottom: 4px;
-}
-
-.post-btn:selection {
-  border: 0px;
-}
-
-.liked {
-  background-image: url("./icons/liked.png");
-}
-
-@keyframes liking-anim {
-  0% {
-    width: 100px;
-  }
-
-  100% {
-    width: 150px;
-  }
 }
