@@ -4,6 +4,36 @@ $(document).ready(async () => {
 })
 
 function setupObservable() {
+  $(".like-btn").click(async function () {
+    const id = getPostId($(this));
+    const countText = $(`#p${id} .likes-count`)[0].innerText;
+    let count = parseInt(countText.match(/\d+\D/)[0]);
+    if ($(this).hasClass('liked'))
+      count -= 1;
+    else
+      count += 1;
+
+    await put(`http://5c332abce0948000147a7749.mockapi.io/api/v1/posts/${id}`, {
+      likes: count
+    });
+
+    $(`#p${id} .likes-count`)[0].innerText = count + " likes";
+    $(this).toggleClass('liked');
+
+  });
+
+  $('.comment-btn').click(function () {
+    $('html, body').animate({
+      scrollTop: $(`#p${getPostId($(this))} .comments`).offset().top - 45
+    })
+  })
+
+  $('.delete-btn').click(async function () {
+    const id = getPostId($(this));
+    $(`#p${id}`).remove();
+    await del(`http://5c332abce0948000147a7749.mockapi.io/api/v1/posts/${id}`);
+  })
+
   var targetNode = $(".posts")[0];
 
   var config = {
@@ -12,23 +42,19 @@ function setupObservable() {
   };
 
   var callback = function (mutationsList, observer) {
-    for (var mutation of mutationsList) {
-      if (mutation.type == 'childList') {
-        if (mutation.addedNodes[0].className == 'more-comments') {
+    for (var mutation of mutationsList)
+      if (mutation.type == 'childList')
+        if (mutation.addedNodes[0].className == 'more-comments')
           $(mutation.addedNodes[0]).click(async () => {
-            const postId = parseInt(mutation.target.parentNode.parentNode.id.slice(1));
+            const postId = getPostId($(mutation.target));
             const comments = await get(`http://5c332abce0948000147a7749.mockapi.io/api/v1/posts/${postId}/comments`);
             sortByDate(comments);
 
-            for (let i = 4; i < comments.length; i++) {
+            for (let i = 4; i < comments.length; i++)
               afterComment(postId, comments[i].username, comments[i].text);
-            }
 
             $(`#p${postId} .more-comments`).addClass('hidden');
           });
-        }
-      }
-    }
   };
 
   var observer = new MutationObserver(callback);
@@ -47,25 +73,24 @@ function renderPost(post) {
   const postHtml = `
     <div id="p${post.id}" class="post">
       <div class="post-header">
-          <img src="${post.avatar}" alt="">
+        <img src="${post.avatar}" class="avatar">
         <div class="username bold-font">${post.username}</div>
+        <img src="./icons/del.png" class="delete-btn float-right">
       </div>
       <div class="post-photo">
         <image src="${post.photoUrl}" />
       </div>
       <div class="post-footer">
         <section class="d-flex">
-          <button class="post-btn">
+          <div class="post-btn">
             <div class="like-btn"></div>
-          </button>
-          <button class="post-btn">
+          </div>
+          <div class="post-btn">
             <div class="comment-btn"></div>
-          </button>
+          </div>
         </section>
 
-        <section class="likes-count">
-          <div class="bold-font">${post.likes} likes</div>
-        </section>
+        <div class="likes-count bold-font">${post.likes} likes</div>
 
         <div class="comments"></div>
 
@@ -123,6 +148,37 @@ const sortByDate = async (arr) => {
   });
 }
 
+const getPostId = (node) => {
+  const currPost = node.parents('.post')[0];
+  return parseInt(currPost.id.slice(1));
+}
+
 const get = async (url = '') => {
   return await fetch(url).then(response => response.json());
+}
+
+const post = async (url = '', data = {}) => {
+  return await fetch(url, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json());
+}
+
+const put = async (url = '', data = {}) => {
+  return await fetch(url, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json());
+}
+
+const del = async (url = '') => {
+  return await fetch(url, {
+    method: 'DELETE'
+  }).then(response => response.json());
 }

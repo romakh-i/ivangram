@@ -57,15 +57,20 @@ a:hover {
   padding: 10px 15px;
 }
 
-.post-header img {
+.avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 0.5px solid black;
 }
 
 .post-header .username {
   margin-left: 10px;
+}
+
+.delete-btn {
+  width: 24px;
+  height: 24px;
+  margin: 3px 0px;
 }
 
 .post-photo {
@@ -136,4 +141,22 @@ a:hover {
   letter-spacing: .2px;
   color: #999;
   margin-bottom: 4px;
+}
+
+.post-btn:selection {
+  border: 0px;
+}
+
+.liked {
+  background-image: url("./icons/liked.png");
+}
+
+@keyframes liking-anim {
+  0% {
+    width: 100px;
+  }
+
+  100% {
+    width: 150px;
+  }
 }
