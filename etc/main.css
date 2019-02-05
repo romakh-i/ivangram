@@ -3,6 +3,11 @@
   box-sizing: border-box;
 }
 
+body {
+  max-width: 935px;
+  margin: auto;
+}
+
 a:hover {
   color: #999;
 }
@@ -53,7 +58,6 @@ a:hover {
 .posts {
   position: inherit;
   overflow: auto;
-  margin-right: -1px;
 }
 
 .post {
@@ -109,7 +113,7 @@ a:hover {
 }
 
 .post-footer {
-  margin: 0px 16px;
+  padding: 0px 16px;
 }
 
 .post-btn {
